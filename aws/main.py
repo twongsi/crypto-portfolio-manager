@@ -37,7 +37,7 @@ class MainStack(Stack):
                 'COINBASE_PRO_API_PASSPHRASE': env('COINBASE_PRO_API_PASSPHRASE'),
                 'COINBASE_PRO_API_SECRET': env('COINBASE_PRO_API_SECRET'),
                 'COINBASE_PRO_API_KEY': env('COINBASE_PRO_API_KEY'),
-                'N_PORTFOLIO_HOLDINGS': 5
+                'N_PORTFOLIO_HOLDINGS': '5'
             },
             log_driver=log_driver,
             cpu=256,
