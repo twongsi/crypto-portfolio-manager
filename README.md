@@ -1,4 +1,4 @@
-# What Is This?
+# What is this?
 My attempt at a low-frequency cryptocurrency trading bot.
 
 # How does it work?
