@@ -9,6 +9,11 @@ python-dotenv = "*"
 cbpro = "*"
 
 [dev-packages]
+aws-cdk-core = "*"
+aws-cdk-aws-ecs = "*"
+aws-cdk-aws-ecs-patterns = "*"
+aws-cdk-aws-applicationautoscaling = "*"
+aws-cdk-aws-logs = "*"
 
 [requires]
 python_version = "3.8.6"
