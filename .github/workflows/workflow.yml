@@ -31,7 +31,10 @@ jobs:
           AWS_DEFAULT_REGION="us-east-1" \
           AWS_ACCESS_KEY_ID="${{ secrets.AWS_ACCESS_KEY_ID }}" \
           AWS_SECRET_ACCESS_KEY="${{ secrets.AWS_SECRET_ACCESS_KEY }}" \
-          COINBASE_PRO_API_KEY="${{ secrets.COINBASE_PRO_API_KEY }}" \
-          COINBASE_PRO_API_SECRET="${{ secrets.COINBASE_PRO_API_SECRET }}" \
-          COINBASE_PRO_API_PASSPHRASE="${{ secrets.COINBASE_PRO_API_PASSPHRASE }}" \
+          AGGRO_PORTFOLIO_KEY="${{ secrets.AGGRO_PORTFOLIO_KEY }}" \
+          AGGRO_PORTFOLIO_SECRET="${{ secrets.AGGRO_PORTFOLIO_SECRET }}" \
+          AGGRO_PORTFOLIO_PASSPHRASE="${{ secrets.AGGRO_PORTFOLIO_PASSPHRASE }}" \
+          MARKET_CAP_PORTFOLIO_KEY="${{ secrets.MARKET_CAP_PORTFOLIO_KEY }}" \
+          MARKET_CAP_PORTFOLIO_SECRET="${{ secrets.MARKET_CAP_PORTFOLIO_SECRET }}" \
+          MARKET_CAP_PORTFOLIO_PASSPHRASE="${{ secrets.MARKET_CAP_PORTFOLIO_PASSPHRASE }}" \
           cdk deploy --require-approval never --verbose
