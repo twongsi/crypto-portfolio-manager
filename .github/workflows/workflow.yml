@@ -10,10 +10,10 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
-      - name: Use Python 3.8
+      - name: Use Python 3.8.6
         uses: actions/setup-python@v2
         with:
-          python-version: '3.8'
+          python-version: '3.8.6'
       - name: Setup pipenv
         run: |
           sudo pip install pipenv --upgrade
