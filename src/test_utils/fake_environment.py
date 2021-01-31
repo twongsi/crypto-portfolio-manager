@@ -3,7 +3,7 @@ from src.environment import AbstractEnvironment
 
 class FakeEnvironment(AbstractEnvironment):
 
-    def __init__(self, n_portfolio_holdings: int):
+    def __init__(self, n_portfolio_holdings: int = 0):
         self.__n_portfolio_holdings = n_portfolio_holdings
 
     def get_coinbase_api_key(self) -> str:

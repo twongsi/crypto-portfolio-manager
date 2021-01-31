@@ -31,7 +31,24 @@ class MainStack(Stack):
                 hour='2',
                 week_day='MON'
             ),
-            log_prefix='aggro-portfolio-manager'
+            log_prefix='aggressive-portfolio-manager'
+        )
+        scheduled_fargate_task(
+            scope,
+            'MarketCapPortfolioManager',
+            image=image,
+            module='src.market_cap_portfolio.rebalance',
+            environment={
+                'COINBASE_PRO_API_KEY': environ.get('MARKET_CAP_PORTFOLIO_KEY'),
+                'COINBASE_PRO_API_SECRET': environ.get('MARKET_CAP_PORTFOLIO_SECRET'),
+                'COINBASE_PRO_API_PASSPHRASE': environ.get('MARKET_CAP_PORTFOLIO_PASSPHRASE')
+            },
+            schedule=Schedule.cron(
+                minute='0',
+                hour='2',
+                day='1'
+            ),
+            log_prefix='market-cap-portfolio-manager'
         )
 
 
