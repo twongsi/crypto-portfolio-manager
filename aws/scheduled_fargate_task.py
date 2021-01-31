@@ -1,4 +1,3 @@
-import os
 from typing import Mapping
 
 from aws_cdk.aws_applicationautoscaling import Schedule
