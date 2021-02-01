@@ -16,7 +16,7 @@ class MainStack(Stack):
             exclude=['cdk.out']
         )
         scheduled_fargate_task(
-            scope,
+            self,
             'AggressivePortfolioManager',
             image=image,
             module='src.aggressive_portfolio.rebalance',
@@ -34,7 +34,7 @@ class MainStack(Stack):
             log_prefix='aggressive-portfolio-manager'
         )
         scheduled_fargate_task(
-            scope,
+            self,
             'MarketCapPortfolioManager',
             image=image,
             module='src.market_cap_portfolio.rebalance',
