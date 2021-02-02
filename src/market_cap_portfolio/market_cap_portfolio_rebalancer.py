@@ -28,4 +28,4 @@ class MarketCapPortfolioRebalancer:
         self.__portfolio_manager.set_portfolio_holdings([
             x['symbol'] for x in metrics
             if float(x['market_cap']) > market_cap_cutoff
-        ])
+        ] or ['BTC'])

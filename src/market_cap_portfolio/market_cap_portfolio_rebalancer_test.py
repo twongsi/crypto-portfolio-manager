@@ -45,7 +45,7 @@ class MarketCapPortfolioRebalancerTest(TestCase):
         fake_portfolio_manager = self.__rebalance(fake_nomics_api)
         self.assertSetEqual({'LTC', 'ETH', 'BTC'}, set(fake_portfolio_manager.get_portfolio_holdings()))
 
-    def test_no_top_outliers(self):
+    def test_just_hold_btc_if_no_outliers(self):
         fake_nomics_api = FakeNomicsApi()
         fake_nomics_api.set_market_cap('FOO1', 100)
         fake_nomics_api.set_market_cap('FOO2', 100)
@@ -61,7 +61,7 @@ class MarketCapPortfolioRebalancerTest(TestCase):
         fake_nomics_api.set_market_cap('ETH', 100)
         fake_nomics_api.set_market_cap('LTC', 100)
         fake_portfolio_manager = self.__rebalance(fake_nomics_api)
-        self.assertSetEqual(set([]), set(fake_portfolio_manager.get_portfolio_holdings()))
+        self.assertSetEqual({'BTC'}, set(fake_portfolio_manager.get_portfolio_holdings()))
 
     def __rebalance(self, fake_nomics_api: AbstractNomicsApi) -> FakePortfolioManager:
         fake_portfolio_manager = FakePortfolioManager()
