@@ -37,7 +37,7 @@ class FakeCoinbaseProApi(AbstractCoinbaseProApi):
     def sell(self, product: dict, quantity: Union[float, str]) -> None:
         symbol = product['base_currency']
         quantity = float(quantity)
-        assert quantity <= self.__symbol_quantities_held[symbol]
+        assert quantity <= self.__symbol_quantities_held.get(symbol, 0)
         assert quantity >= float(product['base_min_size'])
         self.__symbol_quantities_held[symbol] -= quantity
         self.__cash_balance += self.__symbol_quotes[symbol] * quantity
