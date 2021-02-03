@@ -15,7 +15,7 @@ class MainStack(Stack):
             _id,
             schedule=Schedule.cron(
                 minute='0',
-                hour='2',
+                hour='6',
                 week_day='MON'
             ),
             scheduled_fargate_task_image_options=ScheduledFargateTaskImageOptions(
@@ -33,7 +33,7 @@ class MainStack(Stack):
                 },
                 log_driver=AwsLogDriver(
                     stream_prefix='crypto-portfolio-manager',
-                    log_group=LogGroup(scope, '%sLogGroup' % _id)
+                    log_group=LogGroup(self, '%sLogGroup' % _id)
                 ),
                 cpu=256,
                 memory_limit_mib=512
