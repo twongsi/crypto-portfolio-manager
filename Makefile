@@ -6,4 +6,4 @@ test:
 	pipenv run python -m unittest src -v
 
 run:
-	pipenv run python -m src.market_cap_portfolio.rebalance
+	pipenv run python -m src.main
