@@ -1,7 +1,8 @@
-from typing import Dict
+from statistics import stdev
+from typing import Dict, List, Optional
 
-from src.repositories.coinbase_pro_api import AbstractCoinbaseProApi
-from src.repositories.nomics_api import AbstractNomicsApi
+from src.coinbase_pro_api import AbstractCoinbaseProApi
+from src.nomics_api import AbstractNomicsApi
 
 
 class PortfolioRebalancer:
@@ -10,26 +11,40 @@ class PortfolioRebalancer:
         self.__nomics_api = nomics_api
 
     def rebalance(self) -> None:
-        crypto_products: Dict[str, dict] = {
-            product['base_currency']: product
-            for product in self.__coinbase_pro_api.get_crypto_products()
-        }
+        symbols = self.__coinbase_pro_api.get_crypto_symbols()
         symbols_to_hold = [
             x['symbol'] for x in
             sorted(
-                self.__nomics_api.get_metrics(list(crypto_products.keys())),
+                self.__nomics_api.get_metrics(symbols),
                 key=lambda x: float(x.get('market_cap', 0)),
                 reverse=True
             )[:5]
         ]
-        wallets: Dict[str, dict] = {w['currency']: w for w in self.__coinbase_pro_api.get_non_empty_crypto_wallets()}
-        for symbol, wallet in wallets.items():
-            self.__coinbase_pro_api.sell(
-                crypto_products[symbol],
-                float(wallet['available'])
-            )
-        liquidity = self.__coinbase_pro_api.get_cash_balance()
-        target_balance: float = (liquidity / len(symbols_to_hold)) if symbols_to_hold else 0
-        for symbol in symbols_to_hold:
-            product = crypto_products[symbol]
-            self.__coinbase_pro_api.buy(product, target_balance)
+        candles: Dict[str, List[dict]] = {
+            symbol: self.__nomics_api.get_candles(symbol)
+            for symbol in symbols_to_hold
+        }
+
+        for wallet in self.__coinbase_pro_api.get_non_empty_crypto_wallets():
+            self.__coinbase_pro_api.sell(wallet['currency'], float(wallet['available']))
+
+        inverse_volatilities: Dict[str, float] = {
+            symbol: self.__calculate_inverse_volatility([float(x['close']) for x in candles[symbol]])
+            for symbol in symbols_to_hold
+        }
+        total_inverse_volatility = sum(inverse_volatilities.values())
+        total_liquidity = self.__coinbase_pro_api.get_cash_balance()
+        for symbol, inverse_volatility in sorted(inverse_volatilities.items(), key=lambda x: x[1], reverse=True):
+            weight = inverse_volatility / total_inverse_volatility
+            buy_amount = total_liquidity * weight
+            self.__coinbase_pro_api.buy(symbol, buy_amount)
+
+    @staticmethod
+    def __calculate_inverse_volatility(prices: List[float]) -> float:
+        daily_returns: List[float] = []
+        last_price: Optional[float] = None
+        for price in prices:
+            if last_price is not None:
+                daily_returns.append((price / last_price) - 1)
+            last_price = price
+        return 1 / stdev(daily_returns)

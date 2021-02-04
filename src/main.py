@@ -1,7 +1,7 @@
 import src.env as env
 from src.portfolio_rebalancer import PortfolioRebalancer
-from src.repositories.coinbase_pro_api import CoinbaseProApi
-from src.repositories.nomics_api import NomicsApi
+from src.coinbase_pro_api import CoinbaseProApi
+from src.nomics_api import NomicsApi
 
 
 def main():

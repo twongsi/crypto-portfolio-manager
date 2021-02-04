@@ -9,8 +9,13 @@ class AbstractNomicsApi(ABC):
     def get_metrics(self, symbols: List[str]) -> List[dict]:
         pass
 
+    @abstractmethod
+    def get_candles(self, symbol: str) -> List[dict]:
+        pass
+
 
 class NomicsApi(AbstractNomicsApi):
+
     def get_metrics(self, symbols: List[str]) -> List[dict]:
         return requests.get(
             'https://nomics.com/data/currencies-ticker',
@@ -19,3 +24,12 @@ class NomicsApi(AbstractNomicsApi):
                 'symbols': ','.join(symbols)
             }
         ).json()['items']
+
+    def get_candles(self, symbol: str) -> List[dict]:
+        return requests.get(
+            'https://nomics.com/data/candles',
+            params={
+                'currency': symbol,
+                'interval': '365d'
+            }
+        ).json()
