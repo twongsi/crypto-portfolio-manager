@@ -1,7 +1,7 @@
 from math import floor
 from typing import Dict, List, Union
 
-from src.coinbase_pro_api import AbstractCoinbaseProApi
+from src.repositories.coinbase_pro_api import AbstractCoinbaseProApi
 
 
 class FakeCoinbaseProApi(AbstractCoinbaseProApi):

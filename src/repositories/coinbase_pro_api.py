@@ -44,12 +44,10 @@ class CoinbaseProApi(AbstractCoinbaseProApi):
         ]
 
     def buy(self, symbol: str, fiat_amount: Union[float, str]) -> None:
-        fiat_amount = float(fiat_amount)
-        fiat_amount = floor(fiat_amount * 100) / 100
         self.__cbp_client.place_market_order(
             product_id='%s-USD' % symbol,
             side='buy',
-            funds=str(fiat_amount)
+            funds=str(floor(float(fiat_amount) * 100) / 100)
         )
 
     def sell(self, symbol: str, quantity: Union[float, str]) -> None:

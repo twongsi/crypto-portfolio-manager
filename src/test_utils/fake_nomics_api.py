@@ -1,6 +1,6 @@
 from typing import List, Dict
 
-from src.nomics_api import AbstractNomicsApi
+from src.repositories.nomics_api import AbstractNomicsApi
 
 
 class FakeNomicsApi(AbstractNomicsApi):
@@ -17,7 +17,7 @@ class FakeNomicsApi(AbstractNomicsApi):
             } for k, v in self.__market_caps.items()
         ]
 
-    def get_candles(self, symbol: str) -> List[dict]:
+    def get_recent_candles(self, symbol: str) -> List[dict]:
         return [
             {
                 'close': str(price)

@@ -1,8 +1,8 @@
 from statistics import stdev
 from typing import Dict, List, Optional
 
-from src.coinbase_pro_api import AbstractCoinbaseProApi
-from src.nomics_api import AbstractNomicsApi
+from src.repositories.coinbase_pro_api import AbstractCoinbaseProApi
+from src.repositories.nomics_api import AbstractNomicsApi
 
 
 class PortfolioRebalancer:
@@ -21,7 +21,7 @@ class PortfolioRebalancer:
             )[:5]
         ]
         candles: Dict[str, List[dict]] = {
-            symbol: self.__nomics_api.get_candles(symbol)
+            symbol: self.__nomics_api.get_recent_candles(symbol)
             for symbol in symbols_to_hold
         }
 
