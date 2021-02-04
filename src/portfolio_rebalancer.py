@@ -1,4 +1,3 @@
-from math import floor
 from typing import Dict
 
 from src.repositories.coinbase_pro_api import AbstractCoinbaseProApi
@@ -24,29 +23,13 @@ class PortfolioRebalancer:
             )[:5]
         ]
         wallets: Dict[str, dict] = {w['currency']: w for w in self.__coinbase_pro_api.get_non_empty_crypto_wallets()}
-        liquidity = self.__coinbase_pro_api.get_cash_balance() + sum([float(x['balance']) for x in wallets.values()])
-        target_balance: float = (floor((liquidity / len(symbols_to_hold)) * 100) / 100) if symbols_to_hold else 0
-
-        liquidate_symbols = [x for x in wallets.keys() if x not in symbols_to_hold]
-        for liquidate_symbol in liquidate_symbols:
+        for symbol, wallet in wallets.items():
             self.__coinbase_pro_api.sell(
-                crypto_products[liquidate_symbol],
-                wallets[liquidate_symbol]['available']
+                crypto_products[symbol],
+                float(wallet['available'])
             )
-
-        sell_symbols = [x for x in wallets.keys() if x not in (liquidate_symbols + symbols_to_hold)]
-        for sell_symbol in sell_symbols:
-            wallet = wallets[sell_symbol]
-            product = crypto_products[sell_symbol]
-            existing_quantity = float(wallet['available'])
-            if existing_quantity > 0:
-                self.__coinbase_pro_api.sell(product, existing_quantity)
-            self.__coinbase_pro_api.buy(product, target_balance)
-
-        for buy_symbol in symbols_to_hold:
-            wallet = wallets.get(buy_symbol, {})
-            product = crypto_products[buy_symbol]
-            exiting_quantity = float(wallet.get('available', 0))
-            if exiting_quantity > 0:
-                self.__coinbase_pro_api.sell(product, exiting_quantity)
+        liquidity = self.__coinbase_pro_api.get_cash_balance()
+        target_balance: float = (liquidity / len(symbols_to_hold)) if symbols_to_hold else 0
+        for symbol in symbols_to_hold:
+            product = crypto_products[symbol]
             self.__coinbase_pro_api.buy(product, target_balance)
