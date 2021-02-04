@@ -9,7 +9,7 @@ class AbstractEmailer(ABC):
         pass
 
 
-class Emailer(AbstractEmailer):
+class AwsSesEmailer(AbstractEmailer):
     def send(self, to: str, subject: str, body: str) -> None:
         ses_client = boto3.client('ses')
         ses_client.send_email(

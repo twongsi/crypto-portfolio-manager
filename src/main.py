@@ -1,4 +1,4 @@
-from src.emailer import Emailer
+from src.awssesemailer import AwsSesEmailer
 from src.environment import Environment
 from src.portfolio_rebalancer import PortfolioRebalancer
 from src.repositories.coinbase_pro_api import CoinbaseProApi
@@ -15,7 +15,7 @@ def main():
             passphrase=environment.get_coinbase_api_passphrase()
         ),
         nomics_api=NomicsApi(),
-        emailer=Emailer()
+        emailer=AwsSesEmailer()
     ).rebalance()
 
 
