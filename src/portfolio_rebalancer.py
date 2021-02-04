@@ -32,7 +32,7 @@ class PortfolioRebalancer:
             self.__coinbase_pro_api.sell(wallet['currency'], float(wallet['available']))
 
     def __get_symbol_weights(self) -> Dict[str, float]:
-        symbols = self.__coinbase_pro_api.get_tradeable_crypto_simbles()
+        symbols = self.__coinbase_pro_api.get_tradeable_crypto_symbols()
         symbols_to_hold = [
             x['symbol'] for x in
             sorted(

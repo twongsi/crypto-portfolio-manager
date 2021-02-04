@@ -7,7 +7,7 @@ from cbpro import AuthenticatedClient
 
 class AbstractCoinbaseProApi(ABC):
     @abstractmethod
-    def get_tradeable_crypto_simbles(self) -> List[str]:
+    def get_tradeable_crypto_symbols(self) -> List[str]:
         pass
 
     @abstractmethod
@@ -31,7 +31,7 @@ class CoinbaseProApi(AbstractCoinbaseProApi):
     def __init__(self, key: str, secret: str, passphrase: str):
         self.__cbp_client = AuthenticatedClient(key, secret, passphrase)
 
-    def get_tradeable_crypto_simbles(self) -> List[str]:
+    def get_tradeable_crypto_symbols(self) -> List[str]:
         return [
             x['base_currency'] for x in self.__cbp_client.get_products()
             if x['quote_currency'] == 'USD'
