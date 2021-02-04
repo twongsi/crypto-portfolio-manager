@@ -34,4 +34,5 @@ jobs:
           COINBASE_PRO_API_KEY="${{ secrets.COINBASE_PRO_API_KEY }}" \
           COINBASE_PRO_API_SECRET="${{ secrets.COINBASE_PRO_API_SECRET }}" \
           COINBASE_PRO_API_PASSPHRASE="${{ secrets.COINBASE_PRO_API_PASSPHRASE }}" \
+          EMAIL="${{ secrets.EMAIL }}" \
           cdk deploy --require-approval never --verbose

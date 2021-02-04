@@ -24,8 +24,15 @@ class AbstractEnvironment(ABC):
     def get_n_to_hold(self) -> int:
         pass
 
+    @abstractmethod
+    def get_email(self) -> str:
+        pass
+
 
 class Environment(AbstractEnvironment):
+
+    def get_email(self) -> str:
+        return environ.get('EMAIL')
 
     def get_coinbase_api_key(self) -> str:
         return environ.get('COINBASE_PRO_API_KEY')

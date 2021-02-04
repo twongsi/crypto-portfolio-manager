@@ -3,6 +3,7 @@ from unittest import TestCase
 
 from src.portfolio_rebalancer import PortfolioRebalancer
 from src.test_utils.fake_coinbase_pro_api import FakeCoinbaseProApi
+from src.test_utils.fake_emailer import FakeEmailer
 from src.test_utils.fake_environment import FakeEnvironment
 from src.test_utils.fake_nomics_api import FakeNomicsApi
 
@@ -33,6 +34,10 @@ cryptocurrencies: Dict[str, dict] = {
 
 
 class PortfolioRebalancerTest(TestCase):
+    def setUp(self) -> None:
+        super().setUp()
+        self.__fake_emailer = FakeEmailer()
+
     def test_from_empty_portfolio(self):
         fake_coinbase_pro_api = self.__get_fake_coinbase_pro_api()
         self.__rebalance(fake_coinbase_pro_api)
@@ -60,6 +65,21 @@ class PortfolioRebalancerTest(TestCase):
         self.__rebalance(fake_coinbase_pro_api, 6)
         self.assertGreater(fake_coinbase_pro_api.get_balance_held(XLM), 0)
 
+    def test_email(self):
+        fake_coinbase_pro_api = self.__get_fake_coinbase_pro_api()
+        email = 'foo@bar.com'
+        self.__rebalance(fake_coinbase_pro_api, email=email)
+        self.assertEqual(self.__fake_emailer.to, email)
+        self.assertEqual(self.__fake_emailer.subject, 'Crypto portfolio has been rebalanced')
+        self.assertEqual(
+            self.__fake_emailer.body,
+            'BCH (24.2%)\n' +
+            'LINK (21.5%)\n' +
+            'LTC (19.5%)\n' +
+            'ETH (17.9%)\n' +
+            'BTC (16.7%)'
+        )
+
     def __assert_common(self, fake_coinbase_pro_api: FakeCoinbaseProApi):
         for symbol in [BTC, ETH, LTC, LINK, BCH]:
             with self.subTest('should hold', symbol=symbol):
@@ -82,10 +102,9 @@ class PortfolioRebalancerTest(TestCase):
         with self.subTest('should have minimal cash leftover'):
             self.assertLess(fake_coinbase_pro_api.get_cash_balance(), 1)
 
-    @staticmethod
-    def __rebalance(fake_coinbase_pro_api: FakeCoinbaseProApi, n_to_hold: int = 5) -> None:
+    def __rebalance(self, fake_coinbase_pro_api: FakeCoinbaseProApi, n_to_hold: int = 5, email: str = '') -> None:
         PortfolioRebalancer(
-            environment=FakeEnvironment(n_to_hold=n_to_hold),
+            environment=FakeEnvironment(n_to_hold=n_to_hold, email=email),
             coinbase_pro_api=fake_coinbase_pro_api,
             nomics_api=FakeNomicsApi(
                 market_caps={k: v['market_cap'] for k, v in cryptocurrencies.items()},
@@ -93,7 +112,8 @@ class PortfolioRebalancerTest(TestCase):
                     k: [1 for _ in range(v['price_stdev'])] + [1 + v['price_stdev'] for _ in range(v['price_stdev'])]
                     for k, v in cryptocurrencies.items()
                 }
-            )
+            ),
+            emailer=self.__fake_emailer
         ).rebalance()
 
     @staticmethod
