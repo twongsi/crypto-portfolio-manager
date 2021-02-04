@@ -10,7 +10,7 @@ class AbstractNomicsApi(ABC):
         pass
 
     @abstractmethod
-    def get_recent_candles(self, symbol: str) -> List[dict]:
+    def get_past_year_candles(self, symbol: str) -> List[dict]:
         pass
 
 
@@ -25,11 +25,11 @@ class NomicsApi(AbstractNomicsApi):
             }
         ).json()['items']
 
-    def get_recent_candles(self, symbol: str) -> List[dict]:
+    def get_past_year_candles(self, symbol: str) -> List[dict]:
         return requests.get(
             'https://nomics.com/data/candles',
             params={
                 'currency': symbol,
-                'interval': '30d'
+                'interval': '365d'
             }
         ).json()

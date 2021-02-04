@@ -17,7 +17,7 @@ class FakeNomicsApi(AbstractNomicsApi):
             } for k, v in self.__market_caps.items()
         ]
 
-    def get_recent_candles(self, symbol: str) -> List[dict]:
+    def get_past_year_candles(self, symbol: str) -> List[dict]:
         return [
             {
                 'close': str(price)

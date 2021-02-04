@@ -42,7 +42,7 @@ class PortfolioRebalancer:
             )[:self.__environment.get_n_to_hold()]
         ]
         candles: Dict[str, List[dict]] = {
-            symbol: self.__nomics_api.get_recent_candles(symbol)
+            symbol: self.__nomics_api.get_past_year_candles(symbol)
             for symbol in symbols_to_hold
         }
         inverse_volatilities: Dict[str, float] = {
