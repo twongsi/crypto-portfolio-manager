@@ -1,12 +1,19 @@
 from statistics import stdev
 from typing import Dict, List, Optional
 
+from src.environment import AbstractEnvironment
 from src.repositories.coinbase_pro_api import AbstractCoinbaseProApi
 from src.repositories.nomics_api import AbstractNomicsApi
 
 
 class PortfolioRebalancer:
-    def __init__(self, coinbase_pro_api: AbstractCoinbaseProApi, nomics_api: AbstractNomicsApi):
+    def __init__(
+            self,
+            environment: AbstractEnvironment,
+            coinbase_pro_api: AbstractCoinbaseProApi,
+            nomics_api: AbstractNomicsApi
+    ):
+        self.__environment = environment
         self.__coinbase_pro_api = coinbase_pro_api
         self.__nomics_api = nomics_api
 
@@ -18,7 +25,7 @@ class PortfolioRebalancer:
                 self.__nomics_api.get_metrics(symbols),
                 key=lambda x: float(x.get('market_cap', 0)),
                 reverse=True
-            )[:5]
+            )[:self.__environment.get_n_to_hold()]
         ]
         candles: Dict[str, List[dict]] = {
             symbol: self.__nomics_api.get_recent_candles(symbol)

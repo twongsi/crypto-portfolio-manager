@@ -29,7 +29,8 @@ class MainStack(Stack):
                 environment={
                     'COINBASE_PRO_API_KEY': environ.get('COINBASE_PRO_API_KEY'),
                     'COINBASE_PRO_API_SECRET': environ.get('COINBASE_PRO_API_SECRET'),
-                    'COINBASE_PRO_API_PASSPHRASE': environ.get('COINBASE_PRO_API_PASSPHRASE')
+                    'COINBASE_PRO_API_PASSPHRASE': environ.get('COINBASE_PRO_API_PASSPHRASE'),
+                    'N_TO_HOLD': 5
                 },
                 log_driver=AwsLogDriver(
                     stream_prefix='crypto-portfolio-manager',

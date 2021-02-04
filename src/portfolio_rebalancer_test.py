@@ -3,6 +3,7 @@ from unittest import TestCase
 
 from src.portfolio_rebalancer import PortfolioRebalancer
 from src.test_utils.fake_coinbase_pro_api import FakeCoinbaseProApi
+from src.test_utils.fake_environment import FakeEnvironment
 from src.test_utils.fake_nomics_api import FakeNomicsApi
 
 
@@ -22,12 +23,12 @@ BCH = 'BCH'
 XLM = 'XLM'
 
 cryptocurrencies: Dict[str, dict] = {
-    BTC: __cryptocurrency(quote=36571.03, market_cap=999, price_stdev=6),
-    ETH: __cryptocurrency(quote=1543.34, market_cap=998, price_stdev=5),
-    LTC: __cryptocurrency(quote=0.999319, market_cap=997, price_stdev=4),
-    LINK: __cryptocurrency(quote=0.379226, market_cap=996, price_stdev=3),
-    BCH: __cryptocurrency(quote=17.29, market_cap=995, price_stdev=2),
-    XLM: __cryptocurrency(quote=0.430767, market_cap=994, price_stdev=1)
+    BTC: __cryptocurrency(quote=36571.03, market_cap=999, price_stdev=7),
+    ETH: __cryptocurrency(quote=1543.34, market_cap=998, price_stdev=6),
+    LTC: __cryptocurrency(quote=0.999319, market_cap=997, price_stdev=5),
+    LINK: __cryptocurrency(quote=0.379226, market_cap=996, price_stdev=4),
+    BCH: __cryptocurrency(quote=17.29, market_cap=995, price_stdev=3),
+    XLM: __cryptocurrency(quote=0.430767, market_cap=994, price_stdev=2)
 }
 
 
@@ -49,6 +50,16 @@ class PortfolioRebalancerTest(TestCase):
         self.__rebalance(fake_coinbase_pro_api)
         self.__assert_common(fake_coinbase_pro_api)
 
+    def test_n_to_hold_configurability_minus_1(self):
+        fake_coinbase_pro_api = self.__get_fake_coinbase_pro_api()
+        self.__rebalance(fake_coinbase_pro_api, 4)
+        self.assertEqual(0, fake_coinbase_pro_api.get_balance_held(BCH))
+
+    def test_n_to_hold_configurability_plus_1(self):
+        fake_coinbase_pro_api = self.__get_fake_coinbase_pro_api()
+        self.__rebalance(fake_coinbase_pro_api, 6)
+        self.assertGreater(fake_coinbase_pro_api.get_balance_held(XLM), 0)
+
     def __assert_common(self, fake_coinbase_pro_api: FakeCoinbaseProApi):
         for symbol in [BTC, ETH, LTC, LINK, BCH]:
             with self.subTest('should hold', symbol=symbol):
@@ -69,11 +80,12 @@ class PortfolioRebalancerTest(TestCase):
             self.assertEqual(0, fake_coinbase_pro_api.get_balance_held(XLM))
 
         with self.subTest('should have minimal cash leftover'):
-            self.assertLess(fake_coinbase_pro_api.get_cash_balance(), 0.02)
+            self.assertLess(fake_coinbase_pro_api.get_cash_balance(), 1)
 
     @staticmethod
-    def __rebalance(fake_coinbase_pro_api: FakeCoinbaseProApi) -> None:
+    def __rebalance(fake_coinbase_pro_api: FakeCoinbaseProApi, n_to_hold: int = 5) -> None:
         PortfolioRebalancer(
+            environment=FakeEnvironment(n_to_hold=n_to_hold),
             coinbase_pro_api=fake_coinbase_pro_api,
             nomics_api=FakeNomicsApi(
                 market_caps={k: v['market_cap'] for k, v in cryptocurrencies.items()},

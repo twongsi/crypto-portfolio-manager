@@ -1,15 +1,16 @@
-import src.env as env
+from src.environment import Environment
 from src.portfolio_rebalancer import PortfolioRebalancer
 from src.repositories.coinbase_pro_api import CoinbaseProApi
 from src.repositories.nomics_api import NomicsApi
 
 
 def main():
+    environment = Environment()
     PortfolioRebalancer(
         coinbase_pro_api=CoinbaseProApi(
-            key=env.get_coinbase_api_key(),
-            secret=env.get_coinbase_api_secret(),
-            passphrase=env.get_coinbase_api_passphrase()
+            key=environment.get_coinbase_api_key(),
+            secret=environment.get_coinbase_api_secret(),
+            passphrase=environment.get_coinbase_api_passphrase()
         ),
         nomics_api=NomicsApi()
     ).rebalance()
