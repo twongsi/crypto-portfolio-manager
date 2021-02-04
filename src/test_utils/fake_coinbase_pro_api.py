@@ -10,7 +10,7 @@ class FakeCoinbaseProApi(AbstractCoinbaseProApi):
         self.__symbol_quantities_held: Dict[str, float] = {}
         self.__symbol_quotes = symbol_quotes
 
-    def get_crypto_symbols(self) -> List[str]:
+    def get_tradeable_crypto_simbles(self) -> List[str]:
         return list(set(list(self.__symbol_quotes.keys()) + list(self.__symbol_quantities_held.keys())))
 
     def get_cash_balance(self) -> float:
