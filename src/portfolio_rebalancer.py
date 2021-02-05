@@ -2,7 +2,7 @@ from math import floor
 from statistics import stdev
 from typing import Dict, List, Optional
 
-from src.awssesemailer import AbstractEmailer
+from src.aws_ses_emailer import AbstractEmailer
 from src.environment import AbstractEnvironment
 from src.repositories.coinbase_pro_api import AbstractCoinbaseProApi
 from src.repositories.nomics_api import AbstractNomicsApi

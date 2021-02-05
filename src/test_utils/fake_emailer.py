@@ -1,6 +1,6 @@
 from typing import Optional
 
-from src.awssesemailer import AbstractEmailer
+from src.aws_ses_emailer import AbstractEmailer
 
 
 class FakeEmailer(AbstractEmailer):

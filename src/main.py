@@ -1,4 +1,4 @@
-from src.awssesemailer import AwsSesEmailer
+from src.aws_ses_emailer import AwsSesEmailer
 from src.environment import Environment
 from src.portfolio_rebalancer import PortfolioRebalancer
 from src.repositories.coinbase_pro_api import CoinbaseProApi
