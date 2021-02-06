@@ -29,7 +29,6 @@ class MainStack(Stack):
                 'TaskRole',
                 assumed_by=ServicePrincipal('ecs-tasks.amazonaws.com'),
                 managed_policies=[
-                    ManagedPolicy.from_aws_managed_policy_name('AmazonSQSFullAccess'),
                     ManagedPolicy.from_aws_managed_policy_name('AmazonSESFullAccess')
                 ]
             )
