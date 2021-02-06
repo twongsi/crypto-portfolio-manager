@@ -19,10 +19,7 @@ class MainStack(Stack):
             execution_role=Role(
                 self,
                 'ExecutionRole',
-                assumed_by=ServicePrincipal('ecs-tasks.amazonaws.com'),
-                managed_policies=[
-                    ManagedPolicy.from_aws_managed_policy_name('CloudWatchFullAccess')
-                ]
+                assumed_by=ServicePrincipal('ecs-tasks.amazonaws.com')
             ),
             task_role=Role(
                 self,
