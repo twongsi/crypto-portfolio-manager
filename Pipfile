@@ -15,6 +15,7 @@ aws-cdk-aws-ecs = "*"
 aws-cdk-aws-ecs-patterns = "*"
 aws-cdk-aws-applicationautoscaling = "*"
 aws-cdk-aws-logs = "*"
+aws-cdk-aws-iam = "*"
 
 [requires]
 python_version = "3.8.6"
