@@ -2,7 +2,7 @@ from os import getcwd, environ
 
 from aws_cdk.aws_applicationautoscaling import Schedule
 from aws_cdk.aws_ecs import ContainerImage, AwsLogDriver, FargateTaskDefinition
-from aws_cdk.aws_ecs_patterns import ScheduledFargateTask
+from aws_cdk.aws_ecs_patterns import ScheduledFargateTask, ScheduledFargateTaskDefinitionOptions
 from aws_cdk.aws_iam import Role, ServicePrincipal, ManagedPolicy
 from aws_cdk.aws_logs import LogGroup
 from aws_cdk.core import Stack, Construct, App, Environment
@@ -55,7 +55,9 @@ class MainStack(Stack):
             self,
             _id,
             schedule=Schedule.cron(minute='0', hour='6', week_day='MON'),
-            scheduled_fargate_task_definition_options=task_definition
+            scheduled_fargate_task_definition_options=ScheduledFargateTaskDefinitionOptions(
+                task_definition=task_definition
+            )
         )
 
 
