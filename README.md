@@ -1,8 +1,8 @@
 # What is this?
-A bot that re-balances my cryptocurrency portfolio once a week
+A bot that re-balances my cryptocurrency portfolio once a month
 
 # How does it work?
-Every Sunday night:
+At the beginning of every month:
 1. Scrape market cap & price history data from https://nomics.com
 1. Choose the top `N_TO_HOLD` largest market cap cryptocurrencies that are traded on Coinbase Pro
 1. Update my portfolio to hold the cryptocurrencies from the previous step, weighted by their inverse volatility

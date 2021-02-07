@@ -54,7 +54,7 @@ class MainStack(Stack):
         ScheduledFargateTask(
             self,
             _id,
-            schedule=Schedule.cron(minute='0', hour='6', week_day='MON'),
+            schedule=Schedule.cron(minute='0', hour='6', day='1'),
             scheduled_fargate_task_definition_options=ScheduledFargateTaskDefinitionOptions(
                 task_definition=task_definition
             )
